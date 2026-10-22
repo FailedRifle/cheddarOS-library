@@ -115482,7 +115482,6 @@ function _n7(_dm, _em) {
 					_Nm(_dm, _em, ">>>>");
 					if ((yyGetBool(!yyGetBool(global._0B))) && (yyGetBool(!yyGetBool(_ZK("316009.konggames", _yi2()))))) {
 							{
-								// we just killed the site lock! lioxryt on top
 									return;
 							}
 					}
@@ -166833,7 +166832,7 @@ function _us4() {
 		, _MA4 = false
 		, _NA4 = []
 		, _OA4 = 0
-		, _PA4 = 0; // lioxryt
+		, _PA4 = 0; 
 	this._2z4 = [];
 	Object.defineProperties(this, {
 			_l53: {
