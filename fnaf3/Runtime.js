@@ -5596,7 +5596,15 @@ window.Runtime = function (O, qa) {
             c /= a;
             d /= b;
             if (this.Ka & l.mD || this.xn & l.Ex && this.xn & l.BE) c = d = Math.min(c, d);
-            if (c != this.ic || d != this.jc) this.ic = c, this.jc = d, this.canvas.width = Math.floor(this.ic * a), this.canvas.height = Math.floor(this.jc * b), this.context.BC(this.ic, this.jc);
+            var width = Math.max(1, Math.floor(c * a)), height = Math.max(1, Math.floor(d * b));
+            if (c != this.ic || d != this.jc || (null == this.za &&
+                (width !== this.canvas.width || height !== this.canvas.height))) {
+                this.ic = c;
+                this.jc = d;
+                this.canvas.width = width;
+                this.canvas.height = height;
+                this.context.BC(c, d);
+            }
             this.G && this.G.Ai()
         },
         jI: function () {
@@ -5986,13 +5994,20 @@ window.Runtime = function (O, qa) {
             this.Ej =
                 b
         },
+        canvasPoint: function (event, canvas) {
+            var bounds = canvas.getBoundingClientRect();
+            var x = Number.isFinite(event.clientX) ? event.clientX : event.pageX - window.scrollX;
+            var y = Number.isFinite(event.clientY) ? event.clientY : event.pageY - window.scrollY;
+            return {
+                x: (x - bounds.left) * (canvas.width / (bounds.width || canvas.width)),
+                y: (y - bounds.top) * (canvas.height / (bounds.height || canvas.height))
+            };
+        },
         Rn: function (a, b, c) {
-            a.pageX ? (this.Ff = a.pageX, this.Gf = a.pageY) : a.clientY && (this.Ff = a.clientX + document.body.scrollLeft + document.documentElement.scrollLeft, this.Gf = a.clientY + document.body.scrollTop + document.documentElement.scrollTop);
-            for (var d = 0, e = 0, f = b; f && "BODY" != f.tagName;) d += f.offsetTop, e += f.offsetLeft, f = f.offsetParent;
-            this.Ff -= e + this.Cj;
-            this.Gf -= d + this.Ej;
-            this.Ff = Math.floor(this.Ff / this.ic);
-            this.Gf = Math.floor(this.Gf / this.jc);
+            var point = this.canvasPoint(a, b || this.canvas);
+            this.Ff = Math.floor((point.x - this.Cj) / this.ic);
+            this.Gf = Math.floor((point.y - this.Ej) / this.jc);
+            var d;
             null != this.G && null != this.G.i && this.G.i.KB();
             for (d = 0; d < this.jb.length; d++) this.jb[d].Rn(a,
                 b);
@@ -6140,14 +6155,10 @@ window.Runtime = function (O, qa) {
             }
         },
         zn: function (a) {
-            var b = a.pageX;
-            for (a = a.target; a && "BODY" != a.tagName;) b -= a.offsetLeft, a = a.offsetParent;
-            return Math.floor((b - this.Cj) / this.ic)
+            return Math.floor((this.canvasPoint(a, this.canvas).x - this.Cj) / this.ic);
         },
         An: function (a) {
-            var b = a.pageY;
-            for (a = a.target; a && "BODY" != a.tagName;) b -= a.offsetTop, a = a.offsetParent;
-            return Math.floor((b - this.Ej) / this.jc)
+            return Math.floor((this.canvasPoint(a, this.canvas).y - this.Ej) / this.jc);
         },
         zH: function (a) {
             if (null != this.kk) {
