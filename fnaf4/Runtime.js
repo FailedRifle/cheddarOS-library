@@ -5517,7 +5517,15 @@ window.Runtime = function (M, qa) {
             var a = this.ma,
                 b = this.ua,
                 c, d;
-            this.fullScreen || this.zn & l.Dx ? (c = window.innerWidth, d = window.innerHeight, document.documentElement.style.overflow = "hidden", document.body.scroll = "no") : (c = a, d = b);
+            if (null == this.za && 0 < a && 0 < b) {
+                c = d = Math.min(Math.max(1, window.innerWidth) / a, Math.max(1, window.innerHeight) / b);
+                document.documentElement.style.overflow = "hidden";
+                document.body.scroll = "no";
+                c *= a;
+                d *= b;
+            } else {
+                this.fullScreen || this.zn & l.Dx ? (c = window.innerWidth, d = window.innerHeight, document.documentElement.style.overflow = "hidden", document.body.scroll = "no") : (c = a, d = b);
+            }
             c /= a;
             d /= b;
             if (this.Ka & l.hD || this.zn & l.Dx && this.zn & l.sE) c = d = Math.min(c, d);
